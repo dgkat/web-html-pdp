@@ -1,46 +1,44 @@
 import androidx.compose.runtime.*
+import kotlinx.browser.window
+import kotlinx.coroutines.await
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
-import org.jetbrains.compose.web.dom.Button
-import org.jetbrains.compose.web.dom.Div
-import org.jetbrains.compose.web.dom.H1
-import org.jetbrains.compose.web.dom.Text
+import kotlinx.serialization.json.Json
+import org.jetbrains.compose.web.dom.*
 import org.jetbrains.compose.web.renderComposable
 
-// Define a simple Product data model
 @Serializable
-data class Product(val id: Int, val name: String)
+data class Product(
+    val name: String,
+    val id: Long = 0,
+    val type: String,
+    val imageUrl: String,
+    val price: Float,
+    val description: String
+)
 
-/*private val jsonBuilder = Json { ignoreUnknownKeys = true }
-
-suspend fun fetchProductById(id: Int = 3): String {
-    val response = window.fetch("http://localhost:8080/productById1").await()
-    val json = response.text().await()
-    println(Product::class.js)
-    val product = jsonBuilder.decodeFromString<Product>(json)
-    println(Product::class.js)
-    return product.name
+sealed class ProductState {
+    data object Loading : ProductState()
+    data class Success(val product: Product) : ProductState()
+    data class Error(val message: String) : ProductState()
 }
 
-val scope = MainScope()
+private val jsonBuilder = Json { ignoreUnknownKeys = true }
 
-fun main() {
+suspend fun fetchProduct(): Product {
+    val response = window.fetch("https://catfact.ninja/fact").await()
+    val json = response.text().await()
+    val fact = jsonBuilder.decodeFromString<CatFactResponse>(json).fact
+    return Product(
+        name = "Sample Product",
+        id = 1L,
+        type = "Electronics",
+        imageUrl = "https://via.placeholder.com/150",
+        price = 29.99f,
+        description = fact
+    )
+}
 
-    scope.launch {
-        try {
-            val product = fetchProductById() // Call to fetch the cat fact
-            val updatedList = listOf(Product(0, product)) + listOf(
-                Product(1, "Laptop"),
-                Product(2, "Smartphone"),
-                Product(3, "Headphones")
-            )
-            console.log("Success : $product")
-        } catch (e: Exception) {
-            console.error("Error fetching cat fact: ${e.message}")
-        }
-    }
-
-}*/
 
 fun main() {
     renderComposable(rootElementId = "root") {
@@ -48,67 +46,61 @@ fun main() {
     }
 }
 
-/*@Composable
-fun App() {
-    var count = remember { mutableStateOf(0) }
-
-    Div {
-        H1 { Text("Hello, Compose for Web!") }
-        Button(
-            attrs = {
-                onClick { count.value++ }
-            }
-        ) {
-            Text("Clicked ${count.value} times")
-        }
-    }
-}*/
 
 @Composable
 fun App() {
     val scope = rememberCoroutineScope()
-    var state by remember { mutableStateOf<CatFactState>(CatFactState.Loading) }
+    var state by remember { mutableStateOf<ProductState>(ProductState.Loading) }
 
-    // Fetch the cat fact when the composable first loads
+    // Fetch the product when the composable first loads
     LaunchedEffect(Unit) {
         scope.launch {
-            try {
-                val fact = fetchCatFact()
-                state = CatFactState.Success(fact)
+            state = try {
+                val product = fetchProduct()
+                ProductState.Success(product)
             } catch (e: Exception) {
-                state = CatFactState.Error("Failed to load cat fact")
+                ProductState.Error("Failed to load product")
             }
         }
     }
-    var count = remember { mutableStateOf(0) }
 
-    Div {
-        H1 { Text("Hello, Compose for Web!") }
-        Button(
-            attrs = {
-                onClick { count.value++ }
-            }
-        ) {
-            Text("Clicked ${count.value} times")
-        }
-    }
-    // Render UI based on the state
     when (state) {
-        is CatFactState.Loading -> {
+        is ProductState.Loading -> {
             Div {
                 Text("Loading...")
-                // You could replace this with an animated loading circle if needed
             }
         }
-        is CatFactState.Success -> {
-            Div(attrs = {classes("header")}) {
-                Text("Cat Fact: ${(state as CatFactState.Success).fact}")
-            }
+
+        is ProductState.Success -> {
+            val product = (state as ProductState.Success).product
+            ProductDetail(product)
         }
-        is CatFactState.Error -> {
+
+        is ProductState.Error -> {
             Div {
-                Text("Error: ${(state as CatFactState.Error).message}")
+                Text("Error: ${(state as ProductState.Error).message}")
             }
+        }
+    }
+}
+
+@Composable
+fun ProductDetail(product: Product) {
+    Div(attrs = { classes("product-detail") }) {
+        Img(src = product.imageUrl, attrs = {
+            classes("product-image")
+            attr("alt", "Product Image")
+        })
+        H2 { Text(product.name) }
+        P { Text("Price: $${product.price}") }
+        P { Text(product.description) }
+        Button(attrs = {
+            onClick {
+                // Navigate to the cart (to be implemented)
+                console.log("Add to Cart clicked for ${product.name}")
+            }
+        }) {
+            Text("Add to Cart")
         }
     }
 }
