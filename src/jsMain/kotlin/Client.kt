@@ -1,6 +1,3 @@
-import kotlinx.browser.window
-import kotlinx.coroutines.await
-import kotlinx.serialization.json.Json
 import productDetailPage.presentation.models.UiProduct
 
 
@@ -9,7 +6,7 @@ sealed class ProductState {
     data class Success(val uiProduct: UiProduct) : ProductState()
     data class Error(val message: String) : ProductState()
 }
-
+/*
 private val jsonBuilder = Json { ignoreUnknownKeys = true }
 
 suspend fun getProduct(): UiProduct {
@@ -24,7 +21,7 @@ suspend fun getProduct(): UiProduct {
         price = 29.99f,
         description = fact
     )
-}
+}*/
 
 
 

@@ -6,10 +6,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.dom.Text
+import org.koin.mp.KoinPlatform.getKoin
 import productDetailPage.presentation.uiComponents.ProductDetailPage
 
 @Composable
-fun ProductDetailPageScreen(viewModel: ProductDetailPageViewModel = ProductDetailPageViewModel()) {
+fun ProductDetailPageScreen(viewModel: ProductDetailPageViewModel = getKoin().get()) {
     val state by viewModel.state.collectAsState()
 
 
