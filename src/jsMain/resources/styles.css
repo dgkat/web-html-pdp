@@ -33,7 +33,7 @@ button {
     margin-bottom: 20px;
 }
 
-button {
+.add-to-cart {
     background-color: #007bff;
     color: white;
     border: none;
@@ -43,6 +43,20 @@ button {
     border-radius: 5px;
 }
 
-button:hover {
+.add-to-cart:hover {
     background-color: #0056b3;
+}
+
+.remove-from-cart {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+.remove-from-cart:hover {
+    background-color: #c82333;
 }

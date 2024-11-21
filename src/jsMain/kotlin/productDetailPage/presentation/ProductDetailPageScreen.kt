@@ -1,6 +1,5 @@
 package productDetailPage.presentation
 
-import ProductState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -13,23 +12,19 @@ import productDetailPage.presentation.uiComponents.ProductDetailPage
 fun ProductDetailPageScreen(viewModel: ProductDetailPageViewModel = getKoin().get()) {
     val state by viewModel.state.collectAsState()
 
-
-    when (state) {
-        is ProductState.Loading -> {
-            Div {
-                Text("Loading...")
-            }
+    if (state.isLoading) {
+        Div {
+            Text("Loading...")
         }
+    }
 
-        is ProductState.Success -> {
-            val product = (state as ProductState.Success).uiProduct
-            ProductDetailPage(product)
+    state.error?.let {
+        Div {
+            Text("Error: $it")
         }
+    }
 
-        is ProductState.Error -> {
-            Div {
-                Text("Error: ${(state as ProductState.Error).message}")
-            }
-        }
+    state.product?.let {
+        ProductDetailPage(uiProduct = it, isInCart = state.isInCart, onEvent = viewModel::onEvent)
     }
 }
