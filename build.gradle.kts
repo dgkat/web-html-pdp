@@ -35,6 +35,9 @@ kotlin {
             dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+
+                // Koin for Dependency Injection
+                implementation("io.insert-koin:koin-core:3.5.6")
             }
         }
         val commonTest by getting {
