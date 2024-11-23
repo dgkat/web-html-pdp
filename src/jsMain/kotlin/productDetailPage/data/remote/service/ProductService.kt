@@ -1,7 +1,7 @@
-package productDetailPage.data.remote.client
+package productDetailPage.data.remote.service
 
 import productDetailPage.data.remote.models.RemoteProduct
 
-interface ProductClient {
+interface ProductService {
     suspend fun getProductById(): RemoteProduct
 }

@@ -1,11 +1,11 @@
-package productDetailPage.data.remote.client
+package productDetailPage.data.remote.service
 
 import kotlinx.browser.window
 import kotlinx.coroutines.await
 import kotlinx.serialization.json.Json
 import productDetailPage.data.remote.models.RemoteProduct
 
-class ProductClientImpl(private val json: Json) : ProductClient {
+class ProductServiceImpl(private val json: Json) : ProductService {
     override suspend fun getProductById(): RemoteProduct {
         val response = window.fetch("https://catfact.ninja/fact").await()
         val jsonText = response.text().await()
