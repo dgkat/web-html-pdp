@@ -7,17 +7,19 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import productDetailPage.domain.useCases.GetProductByIdUseCase
+import productDetailPage.domain.useCases.ObserveProduct
 import productDetailPage.presentation.mappers.DomainToUiProductMapper
 
 class ProductDetailPageViewModel(
     private val getProductByIdUseCase: GetProductByIdUseCase,
-    private val domainToUiProductMapper: DomainToUiProductMapper
+    private val domainToUiProductMapper: DomainToUiProductMapper,
+    private val observeProduct: ObserveProduct
 ) {
     private val _state = MutableStateFlow(ProductDetailPageState())
     val state: StateFlow<ProductDetailPageState> = _state
 
     init {
-        fetchProduct()
+        observeProduct()
     }
 
     private fun fetchProduct() {
@@ -37,6 +39,20 @@ class ProductDetailPageViewModel(
                         product = null,
                         isLoading = false,
                         error = "Error"
+                    )
+                }
+            }
+        }
+    }
+
+    private fun observeProduct() {
+        CoroutineScope(Dispatchers.Main).launch {
+            observeProduct("flowId").collect { product ->
+                val uiProduct = domainToUiProductMapper.map(product)
+                _state.update {
+                    it.copy(
+                        product = uiProduct,
+                        isLoading = false
                     )
                 }
             }
