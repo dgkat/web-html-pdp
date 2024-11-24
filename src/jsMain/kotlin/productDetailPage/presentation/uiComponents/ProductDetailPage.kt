@@ -7,33 +7,41 @@ import productDetailPage.presentation.models.UiProduct
 
 @Composable
 fun ProductDetailPage(uiProduct: UiProduct, isInCart: Boolean, onEvent: (ProductDetailPageEvent) -> Unit) {
-    Div(attrs = { classes("product-detail") }) {
-        Img(src = uiProduct.imageUrl, attrs = {
-            classes("product-image")
-            attr("alt", "Product Image")
-        })
-        H2 { Text(uiProduct.name) }
-        P { Text("Price: $${uiProduct.price}") }
-        P { Text(uiProduct.description) }
-        H3 { Text("Features:") }
-        uiProduct.extendedProductInfo?.let { extendedInfo ->
+    Div(attrs = { classes("product-detail-container") }) {
+        Div(attrs = { classes("product-image-container") }) {
+            Img(src = uiProduct.imageUrl, attrs = {
+                classes("product-image")
+                attr("alt", "Product Image")
+            })
+        }
+
+        Div(attrs = { classes("product-info-container") }) {
+            H2 { Text(uiProduct.name) }
+            P { Text(uiProduct.description) }
+
+            H3 { Text("Features:") }
             Ul {
-                extendedInfo.features.forEach { feature ->
+                uiProduct.extendedProductInfo?.features?.forEach { feature ->
                     Li { Text(feature.featureText) }
                 }
             }
+        }
+    }
+
+    Div(attrs = { classes("floating-bar") }) {
+        Div(attrs = { classes("price") }) {
+            Text("Price: $${uiProduct.price}")
         }
         Button(
             attrs = {
                 classes(if (isInCart) "remove-from-cart" else "add-to-cart")
                 onClick {
-                    // Navigate to the cart (to be implemented)
-                    console.log("Add to Cart clicked for ${uiProduct.name}")
-                    if (isInCart) {
-                        onEvent(ProductDetailPageEvent.RemoveFromCart(uiProduct.id))
+                    val event = if (isInCart) {
+                        ProductDetailPageEvent.RemoveFromCart(uiProduct.id)
                     } else {
-                        onEvent(ProductDetailPageEvent.AddToCart(uiProduct.id))
+                        ProductDetailPageEvent.AddToCart(uiProduct.id)
                     }
+                    onEvent(event)
                 }
             }
         ) {
