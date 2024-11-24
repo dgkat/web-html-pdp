@@ -15,6 +15,14 @@ fun ProductDetailPage(uiProduct: UiProduct, isInCart: Boolean, onEvent: (Product
         H2 { Text(uiProduct.name) }
         P { Text("Price: $${uiProduct.price}") }
         P { Text(uiProduct.description) }
+        H3 { Text("Features:") }
+        uiProduct.extendedProductInfo?.let { extendedInfo ->
+            Ul {
+                extendedInfo.features.forEach { feature ->
+                    Li { Text(feature.featureText) }
+                }
+            }
+        }
         Button(
             attrs = {
                 classes(if (isInCart) "remove-from-cart" else "add-to-cart")
