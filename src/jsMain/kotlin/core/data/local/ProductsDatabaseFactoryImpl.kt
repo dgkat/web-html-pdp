@@ -1,5 +1,6 @@
 package core.data.local
 
+import androidx.compose.runtime.NoLiveLiterals
 import web.events.EventHandler
 import web.events.EventType
 import web.events.addEventListener
@@ -17,22 +18,29 @@ class ProductsDatabaseFactoryImpl : DatabaseFactory {
         }
         return database!!
     }
-
     private suspend fun createDatabase(): IDBDatabase {
         val idbFactory = indexedDB ?: error("IndexedDB is not supported by this browser")
         val request = idbFactory.open("ecommerceDB", 1.0)
 
         request.onupgradeneeded = EventHandler { event ->
+            /*val db = (event.target as IDBOpenDBRequest).result
+            if (!db.objectStoreNames.contains("products")) {
+                *//*db.createObjectStore("products", jsObject<dynamic> {
+                    this["keyPath"] = "id"
+                })*//*
+
+                val objectStoreParams = jsObject<dynamic> {
+                    this["keyPath"] = "id"
+                }
+
+                db.createObjectStore("products", objectStoreParams)
+            }*/
             val db = (event.target as IDBOpenDBRequest).result
             if (!db.objectStoreNames.contains("products")) {
-                /*db.createObjectStore("products", jsObject<dynamic> {
-                    this["keyPath"] = "id"
+                /*db.createObjectStore("products", jsObject {
+                    keyPath = "id"
                 })*/
-
-                val objectStoreParams = js("new Object()")
-                objectStoreParams.keyPath = "id"
-
-                db.createObjectStore("products", options = objectStoreParams)
+                db.createObjectStore("products" )
             }
         }
 
@@ -45,7 +53,7 @@ class ProductsDatabaseFactoryImpl : DatabaseFactory {
             }
 
             request.onerror = EventHandler { event ->
-                val error = (event.target as IDBOpenDBRequest).error
+                val error = (event.target).error
                 continuation.resumeWithException(Exception("Failed to open database: $error"))
             }
         }
@@ -54,15 +62,16 @@ class ProductsDatabaseFactoryImpl : DatabaseFactory {
 
 inline fun <T : Any> jsObject(builder: T.() -> Unit): T =
     (js("{}") as T).apply(builder)
-
+@NoLiveLiterals
 suspend fun testDatabase() {
+    println("test db 1")
     val dbFactory = ProductsDatabaseFactoryImpl()
     val db = dbFactory.getDatabase()
-
+    println("test db 2")
     // Adding a test product
     val transaction = db.transaction("products", IDBTransactionMode.readwrite)
     val store = transaction.objectStore("products")
-
+    println("test db 3")
     val testProduct = jsObject<dynamic> {
         this["id"] = "1"
         this["name"] = "Test Product"
@@ -71,7 +80,7 @@ suspend fun testDatabase() {
         this["price"] = 9.99
         this["description"] = "This is a test product."
     }
-
+    println("test db 4")
     store.put(testProduct)
 
     transaction.addEventListener(EventType("complete"), {

@@ -33,10 +33,15 @@ fun ProductDetailPage(uiProduct: UiProduct, isInCart: Boolean, onEvent: (Product
             }
         }
     }
-    val scope = MainScope()
+    println("test pdp 1")
+    /*val scope = MainScope()
+    println("test pdp 2")
     scope.launch {
+        println("test pdp 3")
         testDatabase()
-    }
+        println("test pdp 4")
+    }*/
+    println("test pdp 5")
 
 
     Div(attrs = { classes("floating-bar") }) {
