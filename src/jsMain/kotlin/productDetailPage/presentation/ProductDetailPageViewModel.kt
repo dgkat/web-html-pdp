@@ -59,6 +59,12 @@ class ProductDetailPageViewModel(
         }
     }
 
+    private fun addProductToCart(){
+        CoroutineScope(Dispatchers.Main).launch {
+
+        }
+    }
+
     fun onEvent(event: ProductDetailPageEvent) {
         when (event) {
             is ProductDetailPageEvent.AddToCart -> _state.update {
