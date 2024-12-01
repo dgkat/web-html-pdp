@@ -1,4 +1,4 @@
 package core.data.local
 
-class ProductsDaoImpl {
+class ProductsDaoImpl : ProductsDao {
 }

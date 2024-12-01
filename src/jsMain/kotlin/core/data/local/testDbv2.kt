@@ -1,14 +1,9 @@
 package core.data.local
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlinx.coroutines.withContext
-import web.idb.*
-
 /**
  * Simplified version of openDatabase function for initializing IndexedDB.
  */
-suspend fun openDatabase(
+/*suspend fun openDatabase(
     name: String,
     //version: Int,
    // initialize: suspend VersionChangeTransaction.(Database) -> Unit
@@ -17,7 +12,7 @@ suspend fun openDatabase(
     val factory = checkNotNull(indexedDB) { "Your browser doesn't support IndexedDB." }
     val request = factory.open(name, 1.0)
 
-    /*var upgraded = false
+    *//*var upgraded = false
     request.onupgradeneeded = { event ->
         upgraded = true
         val db = request.result
@@ -35,15 +30,16 @@ suspend fun openDatabase(
 
     request.onsuccess = {
         console.log("Database opened successfully!")
-    }*/
+    }*//*
 
     // Return the database instance
     Database(request.result)
 }
 
+*/
 /**
  * Simplified wrapper for IndexedDB database operations.
- */
+ *//*
 class Database(private val db: IDBDatabase) {
     fun createStore(name: String, options: dynamic = js("{}")) {
         if (!db.objectStoreNames.contains(name)) {
@@ -54,7 +50,7 @@ class Database(private val db: IDBDatabase) {
     fun close() {
         db.close()
     }
-}
+}*/
 
 /**
  * Wrapper for handling version change transactions.

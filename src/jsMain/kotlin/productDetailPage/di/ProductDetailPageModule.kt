@@ -1,5 +1,9 @@
 package productDetailPage.di
 
+import core.data.local.DatabaseFactory
+import core.data.local.ProductsDao
+import core.data.local.ProductsDaoImpl
+import core.data.local.ProductsDatabaseFactoryImpl
 import kotlinx.serialization.json.Json
 import org.koin.dsl.module
 import productDetailPage.data.ProductRepositoryImpl
@@ -24,10 +28,17 @@ val productDetailPageModule = module {
     single { RemoteToDomainExtendedProductInfoMapper(get()) }
     single { RemoteToDomainProductMapper() }
 
+    //Move to core
+    single<DatabaseFactory> { ProductsDatabaseFactoryImpl() }
+    single<ProductsDao> { ProductsDaoImpl() }
+
     //Domain
     single<GetProductByIdUseCase> { GetProductByIdUseCaseImpl(get()) }
     single<GetExtendedProductInfoById> { GetExtendedProductInfoByIdImpl(get()) }
     single<ObserveProduct> { ObserveProductImpl(get(), get()) }
+    single<AddProductToCartById> { AddProductToCartByIdImpl() }
+    single<AddProductToRecentlySeen> { AddProductToLocalRecentlySeenImpl() }
+    single<AddProductToCartAndRecentlySeen> { AddProductToCartAndRecentlySeenImpl(get(), get()) }
 
     //Pres
     single { DomainToUiFeatureMapper() }

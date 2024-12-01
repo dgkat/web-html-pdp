@@ -1,15 +1,9 @@
 package productDetailPage.presentation.uiComponents
 
 import androidx.compose.runtime.Composable
-import core.data.local.openDatabase
-import core.data.local.testDatabase
-import kotlinx.browser.window
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
 import org.jetbrains.compose.web.dom.*
 import productDetailPage.presentation.ProductDetailPageEvent
 import productDetailPage.presentation.models.UiProduct
-import web.idb.indexedDB
 
 @Composable
 fun ProductDetailPage(uiProduct: UiProduct, isInCart: Boolean, onEvent: (ProductDetailPageEvent) -> Unit) {
@@ -33,15 +27,6 @@ fun ProductDetailPage(uiProduct: UiProduct, isInCart: Boolean, onEvent: (Product
             }
         }
     }
-    println("test pdp 1")
-    /*val scope = MainScope()
-    println("test pdp 2")
-    scope.launch {
-        println("test pdp 3")
-        testDatabase()
-        println("test pdp 4")
-    }*/
-    println("test pdp 5")
 
 
     Div(attrs = { classes("floating-bar") }) {

@@ -52,6 +52,7 @@ kotlin {
                 implementation("org.jetbrains.compose.runtime:runtime:1.7.0")
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-browser:1.0.0-pre.838")
                // implementation("org.jetbrains.kotlin-wrappers:kotlin-dom:1.0.0-pre.509")
+                implementation("com.juul.indexeddb:core:0.8.0")
             }
         }
         val jsTest by getting

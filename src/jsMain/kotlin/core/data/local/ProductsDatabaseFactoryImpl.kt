@@ -10,6 +10,12 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class ProductsDatabaseFactoryImpl : DatabaseFactory {
+    /*override suspend fun getDatabase(): IDBDatabase {
+        return IDBDatabase()
+    }*/
+
+}
+/*
     private var database: IDBDatabase? = null
 
     override suspend fun getDatabase(): IDBDatabase {
@@ -23,23 +29,31 @@ class ProductsDatabaseFactoryImpl : DatabaseFactory {
         val request = idbFactory.open("ecommerceDB", 1.0)
 
         request.onupgradeneeded = EventHandler { event ->
-            /*val db = (event.target as IDBOpenDBRequest).result
+            */
+/*val db = (event.target as IDBOpenDBRequest).result
             if (!db.objectStoreNames.contains("products")) {
-                *//*db.createObjectStore("products", jsObject<dynamic> {
+                *//*
+*/
+/*db.createObjectStore("products", jsObject<dynamic> {
                     this["keyPath"] = "id"
                 })*//*
+*/
+/*
 
                 val objectStoreParams = jsObject<dynamic> {
                     this["keyPath"] = "id"
                 }
 
                 db.createObjectStore("products", objectStoreParams)
-            }*/
+            }*//*
+
             val db = (event.target as IDBOpenDBRequest).result
             if (!db.objectStoreNames.contains("products")) {
-                /*db.createObjectStore("products", jsObject {
+                */
+/*db.createObjectStore("products", jsObject {
                     keyPath = "id"
-                })*/
+                })*//*
+
                 db.createObjectStore("products" )
             }
         }
@@ -100,4 +114,4 @@ suspend fun testDatabase() {
     getRequest.addEventListener(EventType("error"), {
         console.error("Failed to retrieve product: ${getRequest.error}")
     })
-}
+}*/
