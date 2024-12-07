@@ -71,3 +71,15 @@ tasks.register() {
 tasks.register("run", org.jetbrains.compose.experimental.dsl.webExtension()) {
     // Configuration for web browser run
 }*/
+
+tasks.register("deleteYarnLock") {
+    doLast {
+        val lockFile = file("yarn.lock")
+        if (lockFile.exists()) {
+            lockFile.delete()
+            println("yarn.lock file deleted.")
+        } else {
+            println("No yarn.lock file to delete.")
+        }
+    }
+}
