@@ -7,8 +7,13 @@ fun main() {
     startKoin {
         modules(productDetailPageModule)
     }
-
+    try {
     renderComposable(rootElementId = "root") {
-        ProductDetailPageScreen()
+
+            ProductDetailPageScreen()
+
+    }
+    } catch (e: dynamic) {
+        println("ErrorCaught $e")
     }
 }

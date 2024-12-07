@@ -28,6 +28,18 @@ fun ProductDetailPage(uiProduct: UiProduct, isInCart: Boolean, onEvent: (Product
         }
     }
 
+    /*try {
+        window.onload = {
+            // Use kotlinx.coroutines to launch the test function
+            kotlinx.coroutines.GlobalScope.launch {
+                testDatabaseOperations()
+            }
+        }
+    }catch (e:dynamic){
+        println("ErrorCaught $e")
+    }*/
+
+
     Div(attrs = { classes("floating-bar") }) {
         Div(attrs = { classes("price") }) {
             Text("Price: $${uiProduct.price}")
