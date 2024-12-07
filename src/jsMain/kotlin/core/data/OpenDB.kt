@@ -1,6 +1,9 @@
 package core.data
 
-/*
+import com.juul.indexeddb.Database
+import com.juul.indexeddb.KeyPath
+import com.juul.indexeddb.openDatabase
+
 suspend fun openProductsDatabase(): Database {
     return openDatabase("ecommerceDB", 1) { database, oldVersion, _ ->
         if (oldVersion < 1) {
@@ -10,4 +13,4 @@ suspend fun openProductsDatabase(): Database {
             store.createIndex("timestamp", KeyPath("timestamp"), unique = false)
         }
     }
-}*/
+}

@@ -1,7 +1,6 @@
 package core.data
 
-/*
-external interface Product {
+external interface LocalProduct {
     var id: String
     var name: String
     var type: String
@@ -9,4 +8,4 @@ external interface Product {
     var price: Float
     var description: String
     var timestamp: Double
-}*/
+}

@@ -1,6 +1,11 @@
 package productDetailPage.presentation.uiComponents
 
 import androidx.compose.runtime.Composable
+import core.data.testDatabaseOperations
+import kotlinx.browser.window
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.web.dom.*
 import productDetailPage.presentation.ProductDetailPageEvent
 import productDetailPage.presentation.models.UiProduct
@@ -16,6 +21,7 @@ fun ProductDetailPage(uiProduct: UiProduct, isInCart: Boolean, onEvent: (Product
         }
 
         Div(attrs = { classes("product-info-container") }) {
+            println("testDB 2")
             H2 { Text(uiProduct.name) }
             P { Text(uiProduct.description) }
 
@@ -27,18 +33,6 @@ fun ProductDetailPage(uiProduct: UiProduct, isInCart: Boolean, onEvent: (Product
             }
         }
     }
-
-    /*try {
-        window.onload = {
-            // Use kotlinx.coroutines to launch the test function
-            kotlinx.coroutines.GlobalScope.launch {
-                testDatabaseOperations()
-            }
-        }
-    }catch (e:dynamic){
-        println("ErrorCaught $e")
-    }*/
-
 
     Div(attrs = { classes("floating-bar") }) {
         Div(attrs = { classes("price") }) {
@@ -52,6 +46,11 @@ fun ProductDetailPage(uiProduct: UiProduct, isInCart: Boolean, onEvent: (Product
                         ProductDetailPageEvent.RemoveFromCart(uiProduct.id)
                     } else {
                         ProductDetailPageEvent.AddToCart(uiProduct.id)
+                    }
+                    CoroutineScope(Dispatchers.Main).launch  {
+                        println("testDB 5")
+                        testDatabaseOperations()
+                        println("testDB 6")
                     }
                     onEvent(event)
                 }

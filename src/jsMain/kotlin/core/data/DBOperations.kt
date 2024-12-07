@@ -1,7 +1,11 @@
 package core.data
 
-/*
-suspend fun addProduct(database: Database, product: Product) {
+import com.juul.indexeddb.Database
+import com.juul.indexeddb.Key
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
+
+suspend fun addProduct(database: Database, product: LocalProduct) {
     database.writeTransaction("products") {
         val store = objectStore("products")
         store.put(product)
@@ -15,39 +19,38 @@ suspend fun removeProduct(database: Database, productId: String) {
     }
 }
 
-suspend fun getProductById(database: Database, productId: String): Product? {
+suspend fun getProductById(database: Database, productId: String): LocalProduct? {
     return database.transaction("products") {
-        objectStore("products").get(Key(productId)) as Product?
+        objectStore("products").get(Key(productId)) as LocalProduct?
     }
 }
 
-suspend fun getProductByName(database: Database, productName: String): Product? {
+suspend fun getProductByName(database: Database, productName: String): LocalProduct? {
     return database.transaction("products") {
-        objectStore("products").index("name").get(Key(productName)) as Product?
+        objectStore("products").index("name").get(Key(productName)) as LocalProduct?
     }
 }
 
-*/
-/*suspend fun getProductsByFavorite(database: Database, isFavorite: Boolean): List<Product> {
+/*suspend fun getProductsByFavorite(database: Database, isFavorite: Boolean): List<LocalProduct> {
     return database.transaction("products") {
-        objectStore("products").openCursor().map { it.value as Product }.filter { it.isFavorite == isFavorite }.toList()
+        objectStore("products").openCursor().map { it.value as LocalProduct }.filter { it.isFavorite == isFavorite }.toList()
     }
-}*//*
+}*/
 
 
-suspend fun getAllProducts(database: Database): List<Product> {
+suspend fun getAllProducts(database: Database): List<LocalProduct> {
     return database.transaction("products") {
-        objectStore("products").getAll().map { it as Product }
+        objectStore("products").getAll().map { it as LocalProduct }
     }
 }
 
 suspend fun removeProductsBefore(database: Database, timestamp: Double) {
     database.writeTransaction("products") {
-        objectStore("products").openCursor().collect { cursor ->
-            val product = cursor.value as Product
+        objectStore("products").openCursor(autoContinue = true).collect { cursor ->
+            val product = cursor.value as LocalProduct
             if (product.timestamp < timestamp) {
                 cursor.delete()
             }
         }
     }
-}*/
+}
