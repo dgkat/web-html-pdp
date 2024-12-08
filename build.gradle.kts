@@ -40,6 +40,8 @@ kotlin {
 
                 // Koin for Dependency Injection
                 implementation("io.insert-koin:koin-core:3.5.6")
+
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.1")
             }
         }
         val commonTest by getting {

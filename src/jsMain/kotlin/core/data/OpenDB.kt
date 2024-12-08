@@ -5,7 +5,7 @@ import com.juul.indexeddb.KeyPath
 import com.juul.indexeddb.openDatabase
 
 suspend fun openProductsDatabase(): Database {
-    return openDatabase("ecommerceDB", 1) { database, oldVersion, _ ->
+    return openDatabase("fakeShopDB", 1) { database, oldVersion, _ ->
         if (oldVersion < 1) {
             val store = database.createObjectStore("products", KeyPath("id"))
             store.createIndex("name", KeyPath("name"), unique = false)

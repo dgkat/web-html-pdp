@@ -1,6 +1,7 @@
 package core.data
 
 import js.core.jso
+import kotlinx.datetime.Clock
 import productDetailPage.domain.models.Product
 
 suspend fun testDatabaseOperations() {
@@ -15,6 +16,7 @@ suspend fun testDatabaseOperations() {
         imageUrl = "http://example.com/image.png"
         price = 19.99f
         description = "A test product"
+        timestamp = Clock.System.now().toEpochMilliseconds().toDouble()
     }
 
     addProduct(database, product)
@@ -26,7 +28,8 @@ suspend fun testDatabaseOperations() {
             type = it.type,
             imageUrl = it.imageUrl,
             price = it.price,
-            description = it.description
+            description = it.description,
+            timestamp = it.timestamp.toLong()
         )
     }
     println("DatabaseTest  fetchedProduct -> $mappedProduct")
