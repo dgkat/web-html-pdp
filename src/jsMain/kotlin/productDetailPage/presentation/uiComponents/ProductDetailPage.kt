@@ -1,12 +1,12 @@
 package productDetailPage.presentation.uiComponents
 
 import androidx.compose.runtime.Composable
-import core.data.testDatabaseOperations
-import kotlinx.browser.window
+import core.data.DBTest
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.web.dom.*
+import org.koin.mp.KoinPlatform.getKoin
 import productDetailPage.presentation.ProductDetailPageEvent
 import productDetailPage.presentation.models.UiProduct
 
@@ -47,9 +47,10 @@ fun ProductDetailPage(uiProduct: UiProduct, isInCart: Boolean, onEvent: (Product
                     } else {
                         ProductDetailPageEvent.AddToCart(uiProduct.id)
                     }
-                    CoroutineScope(Dispatchers.Main).launch  {
+                    CoroutineScope(Dispatchers.Main).launch {
                         println("testDB 5")
-                        testDatabaseOperations()
+                        val dbTest: DBTest = getKoin().get()
+                        dbTest.testDatabaseOperations()
                         println("testDB 6")
                     }
                     onEvent(event)
