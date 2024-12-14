@@ -47,12 +47,6 @@ fun ProductDetailPage(uiProduct: UiProduct, isInCart: Boolean, onEvent: (Product
                     } else {
                         ProductDetailPageEvent.AddToCart(uiProduct.id)
                     }
-                    CoroutineScope(Dispatchers.Main).launch {
-                        println("testDB 5")
-                        val dbTest: DBTest = getKoin().get()
-                        dbTest.testDatabaseOperations()
-                        println("testDB 6")
-                    }
                     onEvent(event)
                 }
             }

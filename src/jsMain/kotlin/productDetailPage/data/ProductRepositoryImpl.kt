@@ -29,6 +29,7 @@ class ProductRepositoryImpl(
     }
 
     override suspend fun upsertToDb(product: Product) {
+        println("upsertToDb $product")
         productDao.addProduct(
             domainToLocalProductMapper.map(product)
         )

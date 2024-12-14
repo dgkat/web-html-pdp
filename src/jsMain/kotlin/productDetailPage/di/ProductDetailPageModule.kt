@@ -16,6 +16,7 @@ import productDetailPage.presentation.ProductDetailPageViewModel
 import productDetailPage.presentation.mappers.DomainToUiExtendedProductInfoMapper
 import productDetailPage.presentation.mappers.DomainToUiFeatureMapper
 import productDetailPage.presentation.mappers.DomainToUiProductMapper
+import productDetailPage.presentation.mappers.UiToDomainProductMapper
 
 val productDetailPageModule = module {
     //Data
@@ -41,10 +42,13 @@ val productDetailPageModule = module {
     single<GetProductByIdUseCase> { GetProductByIdUseCaseImpl(get()) }
     single<GetExtendedProductInfoById> { GetExtendedProductInfoByIdImpl(get()) }
     single<ObserveProduct> { ObserveProductImpl(get(), get()) }
+    single<AddProductToCart> { AddProductToCartImpl(get()) }
+    single<RemoveProductFromCart> { RemoveProductFromCartImpl(get()) }
 
     //Pres
     single { DomainToUiFeatureMapper() }
     single { DomainToUiExtendedProductInfoMapper(get()) }
     single { DomainToUiProductMapper(get()) }
-    single { ProductDetailPageViewModel(get(), get(), get()) }
+    single { ProductDetailPageViewModel(get(), get(), get(), get(), get()) }
+    single { UiToDomainProductMapper() }
 }
