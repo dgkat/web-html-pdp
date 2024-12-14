@@ -13,8 +13,13 @@ fun main() {
             )
         )
     }
-    renderComposable(rootElementId = "root") {
-        println("testDB 1")
-        ProductDetailPageScreen()
+    try {
+        renderComposable(rootElementId = "root") {
+            println("testDB 1")
+            ProductDetailPageScreen()
+        }
+    }catch (e:Exception){
+        println(e)
+        throw e
     }
 }

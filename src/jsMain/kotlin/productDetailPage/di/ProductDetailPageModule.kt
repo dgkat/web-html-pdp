@@ -3,6 +3,8 @@ package productDetailPage.di
 import kotlinx.serialization.json.Json
 import org.koin.dsl.module
 import productDetailPage.data.ProductRepositoryImpl
+import productDetailPage.data.local.mappers.DomainToLocalProductMapper
+import productDetailPage.data.local.mappers.LocalToDomainProductMapper
 import productDetailPage.data.remote.mappers.RemoteToDomainExtendedProductInfoMapper
 import productDetailPage.data.remote.mappers.RemoteToDomainFeatureMapper
 import productDetailPage.data.remote.mappers.RemoteToDomainProductMapper
@@ -18,8 +20,19 @@ import productDetailPage.presentation.mappers.DomainToUiProductMapper
 val productDetailPageModule = module {
     //Data
     single { Json { ignoreUnknownKeys = true } }
-    single<ProductService> { ProductServiceImpl(get()) }
-    single<ProductRepository> { ProductRepositoryImpl(get(), get(), get()) }
+    single<ProductService> { ProductServiceImpl(json = get()) }
+    single<ProductRepository> {
+        ProductRepositoryImpl(
+            productService = get(),
+            productDao = get(),
+            remoteToDomainProductMapper = get(),
+            remoteToDomainExtendedProductInfoMapper = get(),
+            localToDomainProductMapper = get(),
+            domainToLocalProductMapper = get()
+        )
+    }
+    single { LocalToDomainProductMapper() }
+    single { DomainToLocalProductMapper() }
     single { RemoteToDomainFeatureMapper() }
     single { RemoteToDomainExtendedProductInfoMapper(get()) }
     single { RemoteToDomainProductMapper() }
