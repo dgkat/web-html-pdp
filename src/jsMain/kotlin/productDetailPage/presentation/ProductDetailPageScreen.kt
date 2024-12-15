@@ -10,6 +10,8 @@ import productDetailPage.presentation.uiComponents.ProductDetailPage
 
 @Composable
 fun ProductDetailPageScreen(viewModel: ProductDetailPageViewModel = getKoin().get()) {
+    //viewModel: ProductDetailPageViewModel = remember { getKoin().get() }
+    //TODO when viewmodel no longer a singleton
     val state by viewModel.state.collectAsState()
 
     if (state.isLoading) {

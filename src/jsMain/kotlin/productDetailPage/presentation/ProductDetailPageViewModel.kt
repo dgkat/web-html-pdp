@@ -1,7 +1,6 @@
 package productDetailPage.presentation
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import core.presentation.CommonViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -19,7 +18,7 @@ class ProductDetailPageViewModel(
     private val addProductToCart: AddProductToCart,
     private val removeProductFromCart: RemoveProductFromCart,
     private val uiToDomainProductMapper: UiToDomainProductMapper
-) {
+) : CommonViewModel() {
     private val _state = MutableStateFlow(ProductDetailPageState())
     val state: StateFlow<ProductDetailPageState> = _state
 
@@ -28,7 +27,7 @@ class ProductDetailPageViewModel(
     }
 
     private fun observeProduct() {
-        CoroutineScope(Dispatchers.Main).launch {
+        viewModelScope.launch {
             observeProduct("1").collect { product ->
                 val uiProduct = domainToUiProductMapper.map(product)
                 _state.update {
@@ -42,7 +41,7 @@ class ProductDetailPageViewModel(
     }
 
     private fun addProductToCart() {
-        CoroutineScope(Dispatchers.Main).launch {
+        viewModelScope.launch {
             state.value.product?.let {
                 addProductToCart(product = uiToDomainProductMapper.map(it))
             }
@@ -50,7 +49,7 @@ class ProductDetailPageViewModel(
     }
 
     private fun removeProductFromCart() {
-        CoroutineScope(Dispatchers.Main).launch {
+        viewModelScope.launch {
             state.value.product?.let { uiProduct: UiProduct ->
                 removeProductFromCart(uiProduct.id)
             }
