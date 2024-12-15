@@ -5,18 +5,17 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import productDetailPage.domain.useCases.AddProductToCart
-import productDetailPage.domain.useCases.ObserveProduct
-import productDetailPage.domain.useCases.RemoveProductFromCart
+import productDetailPage.domain.useCases.*
 import productDetailPage.presentation.mappers.DomainToUiProductMapper
 import productDetailPage.presentation.mappers.UiToDomainProductMapper
 import productDetailPage.presentation.models.UiProduct
 
 class ProductDetailPageViewModel(
-    private val domainToUiProductMapper: DomainToUiProductMapper,
-    private val observeProduct: ObserveProduct,
     private val addProductToCart: AddProductToCart,
     private val removeProductFromCart: RemoveProductFromCart,
+    private val getProductByIdUseCase: GetProductByIdUseCase,
+    private val getExtendedProductInfoById: GetExtendedProductInfoById,
+    private val domainToUiProductMapper: DomainToUiProductMapper,
     private val uiToDomainProductMapper: UiToDomainProductMapper
 ) : CommonViewModel() {
     private val _state = MutableStateFlow(ProductDetailPageState())
@@ -28,14 +27,29 @@ class ProductDetailPageViewModel(
 
     private fun observeProduct() {
         viewModelScope.launch {
-            observeProduct("1").collect { product ->
-                val uiProduct = domainToUiProductMapper.map(product)
-                _state.update {
-                    it.copy(
-                        product = uiProduct,
-                        isLoading = false
-                    )
-                }
+            val customId = "1"
+
+            val product = getProductByIdUseCase(customId)
+
+            val uiProduct = domainToUiProductMapper.map(product)
+
+            _state.update {
+                it.copy(
+                    product = uiProduct,
+                    isLoading = false
+                )
+            }
+
+            val extendedProductInfo = getExtendedProductInfoById(customId)
+
+            val productWithExtendedProductInfo = product.copy(extendedProductInfo = extendedProductInfo)
+
+            val uiProductWithExtendedInfo = domainToUiProductMapper.map(productWithExtendedProductInfo)
+            _state.update {
+                it.copy(
+                    product = uiProductWithExtendedInfo,
+                    isLoading = false
+                )
             }
         }
     }

@@ -41,7 +41,6 @@ val productDetailPageModule = module {
     //Domain
     single<GetProductByIdUseCase> { GetProductByIdUseCaseImpl(get()) }
     single<GetExtendedProductInfoById> { GetExtendedProductInfoByIdImpl(get()) }
-    single<ObserveProduct> { ObserveProductImpl(get(), get()) }
     single<AddProductToCart> { AddProductToCartImpl(get()) }
     single<RemoveProductFromCart> { RemoveProductFromCartImpl(get()) }
 
@@ -49,6 +48,15 @@ val productDetailPageModule = module {
     single { DomainToUiFeatureMapper() }
     single { DomainToUiExtendedProductInfoMapper(get()) }
     single { DomainToUiProductMapper(get()) }
-    single { ProductDetailPageViewModel(get(), get(), get(), get(), get()) }
+    single {
+        ProductDetailPageViewModel(
+            addProductToCart = get(),
+            removeProductFromCart = get(),
+            getProductByIdUseCase = get(),
+            getExtendedProductInfoById = get(),
+            domainToUiProductMapper = get(),
+            uiToDomainProductMapper = get()
+        )
+    }
     single { UiToDomainProductMapper() }
 }
