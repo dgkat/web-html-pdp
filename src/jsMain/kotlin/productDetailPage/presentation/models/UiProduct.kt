@@ -7,5 +7,5 @@ data class UiProduct(
     val imageUrl: String,
     val price: Float,
     val description: String,
-    val extendedProductInfo: UiExtendedProductInfo?
+    val isInCart: Boolean
 )

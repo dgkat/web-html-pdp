@@ -47,7 +47,7 @@ val productDetailPageModule = module {
     //Pres
     single { DomainToUiFeatureMapper() }
     single { DomainToUiExtendedProductInfoMapper(get()) }
-    single { DomainToUiProductMapper(get()) }
+    single { DomainToUiProductMapper() }
     single {
         ProductDetailPageViewModel(
             addProductToCart = get(),
@@ -55,6 +55,7 @@ val productDetailPageModule = module {
             getProductByIdUseCase = get(),
             getExtendedProductInfoById = get(),
             domainToUiProductMapper = get(),
+            domainToUiExtendedProductInfoMapper = get(),
             uiToDomainProductMapper = get()
         )
     }

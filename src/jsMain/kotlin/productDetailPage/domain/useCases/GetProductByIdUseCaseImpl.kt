@@ -16,7 +16,9 @@ class GetProductByIdUseCaseImpl(private val repo: ProductRepository) : GetProduc
     }
 
     private suspend fun getLocalProductById(id: String):Product?{
-        return repo.getProductFromDb(id)
+        return repo.getProductFromDb(id)?.copy(
+            isInCart = true
+        )
     }
 
     private suspend fun getRemoteProductById(id: String) :Product{

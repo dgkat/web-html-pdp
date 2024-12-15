@@ -1,17 +1,19 @@
 package productDetailPage.presentation.uiComponents
 
 import androidx.compose.runtime.Composable
-import core.data.DBTest
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import org.jetbrains.compose.web.dom.*
-import org.koin.mp.KoinPlatform.getKoin
+import productDetailPage.presentation.IsInCartEnum
 import productDetailPage.presentation.ProductDetailPageEvent
+import productDetailPage.presentation.models.UiExtendedProductInfo
 import productDetailPage.presentation.models.UiProduct
 
 @Composable
-fun ProductDetailPage(uiProduct: UiProduct, isInCart: Boolean, onEvent: (ProductDetailPageEvent) -> Unit) {
+fun ProductDetailPage(
+    uiProduct: UiProduct,
+    extendedProductInfo: UiExtendedProductInfo,
+    isInCart: IsInCartEnum,
+    onEvent: (ProductDetailPageEvent) -> Unit
+) {
     Div(attrs = { classes("product-detail-container") }) {
         Div(attrs = { classes("product-image-container") }) {
             Img(src = uiProduct.imageUrl, attrs = {
@@ -27,7 +29,7 @@ fun ProductDetailPage(uiProduct: UiProduct, isInCart: Boolean, onEvent: (Product
 
             H3 { Text("Features:") }
             Ul {
-                uiProduct.extendedProductInfo?.features?.forEach { feature ->
+                extendedProductInfo.features?.forEach { feature ->
                     Li { Text(feature.featureText) }
                 }
             }
@@ -38,20 +40,56 @@ fun ProductDetailPage(uiProduct: UiProduct, isInCart: Boolean, onEvent: (Product
         Div(attrs = { classes("price") }) {
             Text("Price: $${uiProduct.price}")
         }
-        Button(
+        when (isInCart) {
+            IsInCartEnum.IN_CART -> AddToCartButton(
+                buttonText = "Remove from Cart",
+                buttonClass = "remove-from-cart",
+                onClick = { onEvent(ProductDetailPageEvent.RemoveFromCart) }
+            )
+            IsInCartEnum.NOT_IN_CART -> AddToCartButton(
+                buttonText = "Add to cart",
+                buttonClass = "add-to-cart",
+                onClick = { onEvent(ProductDetailPageEvent.AddToCart) }
+            )
+            IsInCartEnum.LOADING -> AddToCartButton(
+                buttonText = "Loading",
+                buttonClass = "remove-from-cart",
+                onClick = {  }
+            )
+        }
+
+        /*Button(
             attrs = {
-                classes(if (isInCart) "remove-from-cart" else "add-to-cart")
+                classes(if (isInCart == IsInCartEnum.IN_CART) "remove-from-cart" else "add-to-cart")
                 onClick {
-                    val event = if (isInCart) {
-                        ProductDetailPageEvent.RemoveFromCart(uiProduct.id)
+                    val event = if (isInCart == IsInCartEnum.IN_CART) {
+                        ProductDetailPageEvent.RemoveFromCart
                     } else {
-                        ProductDetailPageEvent.AddToCart(uiProduct.id)
+                        ProductDetailPageEvent.AddToCart
                     }
                     onEvent(event)
                 }
             }
         ) {
-            Text(if (isInCart) "Remove from Cart" else "Add to Cart")
+            Text(if (isInCart == IsInCartEnum.IN_CART) "Remove from Cart" else "Add to Cart")
+        }*/
+    }
+}
+
+@Composable
+fun AddToCartButton(
+    buttonText: String,
+    buttonClass: String,
+    onClick: () -> Unit
+) {
+    Button(
+        attrs = {
+            classes(buttonClass)
+            onClick{
+                onClick()
+            }
         }
+    ) {
+        Text(buttonText)
     }
 }
