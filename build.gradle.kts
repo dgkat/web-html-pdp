@@ -64,6 +64,12 @@ tasks.register<Delete>("cleanDocs") {
     delete("docs")
 }
 
+//Find
+// 1. app.bundle.js
+// 2. app.bundle.js.map
+// 3. index.html
+// 4. styles.css
+// Manually put them in docs/ to publish
 tasks.register<Copy>("prepareForGitHubPages") {
     // Ensure the project builds before copying
     dependsOn("jsBrowserProductionWebpack")
