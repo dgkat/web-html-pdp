@@ -40,56 +40,44 @@ fun ProductDetailPage(
         Div(attrs = { classes("price") }) {
             Text("Price: $${uiProduct.price}")
         }
-        when (isInCart) {
-            IsInCartEnum.IN_CART -> AddToCartButton(
-                buttonText = "Remove from Cart",
-                buttonClass = "remove-from-cart",
-                onClick = { onEvent(ProductDetailPageEvent.RemoveFromCart) }
-            )
-            IsInCartEnum.NOT_IN_CART -> AddToCartButton(
-                buttonText = "Add to cart",
-                buttonClass = "add-to-cart",
-                onClick = { onEvent(ProductDetailPageEvent.AddToCart) }
-            )
-            IsInCartEnum.LOADING -> AddToCartButton(
-                buttonText = "Loading",
-                buttonClass = "remove-from-cart",
-                onClick = {  }
-            )
-        }
-
-        /*Button(
-            attrs = {
-                classes(if (isInCart == IsInCartEnum.IN_CART) "remove-from-cart" else "add-to-cart")
-                onClick {
-                    val event = if (isInCart == IsInCartEnum.IN_CART) {
-                        ProductDetailPageEvent.RemoveFromCart
-                    } else {
-                        ProductDetailPageEvent.AddToCart
-                    }
-                    onEvent(event)
-                }
-            }
-        ) {
-            Text(if (isInCart == IsInCartEnum.IN_CART) "Remove from Cart" else "Add to Cart")
-        }*/
+        //TODO rethink loading
+        AddToCartButton(
+            isInCart = isInCart,
+            onEvent = onEvent
+        )
     }
 }
 
 @Composable
 fun AddToCartButton(
-    buttonText: String,
-    buttonClass: String,
-    onClick: () -> Unit
+    isInCart: IsInCartEnum,
+    onEvent: (ProductDetailPageEvent) -> Unit
 ) {
     Button(
         attrs = {
-            classes(buttonClass)
-            onClick{
-                onClick()
+            classes(
+                when (isInCart) {
+                    IsInCartEnum.IN_CART -> "remove-from-cart"
+                    IsInCartEnum.NOT_IN_CART -> "add-to-cart"
+                    else -> "loading-cart"
+                }
+            )
+            onClick {
+                val event = when (isInCart) {
+                    IsInCartEnum.IN_CART -> ProductDetailPageEvent.RemoveFromCart
+                    IsInCartEnum.NOT_IN_CART -> ProductDetailPageEvent.AddToCart
+                    else -> null
+                }
+                event?.let { onEvent(it) }
             }
         }
     ) {
-        Text(buttonText)
+        Text(
+            when (isInCart) {
+                IsInCartEnum.IN_CART -> "Remove from Cart"
+                IsInCartEnum.NOT_IN_CART -> "Add to Cart"
+                IsInCartEnum.LOADING -> "Loading"
+            }
+        )
     }
 }
