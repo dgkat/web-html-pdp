@@ -61,14 +61,6 @@ button {
     background-color: #c82333;
 }
 
-/* Loading button */
-.loading-cart {
-    background-color: #17a2b8; /* Light blue for loading */
-    font-size: 14px; /* Slightly smaller font for loading */
-    padding: 8px 18px; /* Slightly smaller padding */
-    cursor: default; /* Disabled cursor for loading */
-}
-
 /* Container for product details */
 .product-detail-container {
     display: flex;
@@ -113,14 +105,11 @@ button {
 }
 
 /* Button styling */
-.add-to-cart, .remove-from-cart, .loading-cart {
+.add-to-cart, .remove-from-cart {
     font-size: 16px;
     padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
-    border: none;
-    color: white;
-    transition: background-color 0.3s ease, font-size 0.3s ease, padding 0.3s ease;
 }
 
 /* Desktop styles */
