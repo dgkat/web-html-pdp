@@ -26,10 +26,6 @@ kotlin {
                 }
                 sourceMaps = true
             }
-
-            distribution{
-                outputDirectory.file("$buildDir/distributions")
-            }
         }
     }
     sourceSets {
@@ -64,12 +60,34 @@ application {
     mainClass.set("")
 }
 
-/*
-tasks.register() {
-    val jsBrowserDistribution = tasks.named("jsBrowserDistribution")
-    from(jsBrowserDistribution)
-}*/
-/*
-tasks.register("run", org.jetbrains.compose.experimental.dsl.webExtension()) {
-    // Configuration for web browser run
-}*/
+tasks.register<Delete>("cleanDocs") {
+    delete("docs")
+}
+
+tasks.register<Copy>("prepareForGitHubPages") {
+    // Ensure the project builds before copying
+    dependsOn("jsBrowserProductionWebpack")
+
+    // Clear old docs directory before copying
+    dependsOn("cleanDocs")
+
+    // Copy HTML and CSS from resources to docs
+    from("src/jsMain/resources") {
+        include("index.html", "styles.css")
+    }
+    into("docs/")
+
+    // Copy JS and map files from the production output to docs
+    from("build/kotlin-webpack/js/productionExecutable") {
+        include("app.bundle.js", "app.bundle.js.map")
+    }
+    into("docs/")
+}
+
+tasks.register("deployToGitHubPages") {
+    dependsOn("prepareForGitHubPages")
+
+    doLast {
+        println("Deployment files are ready. Commit and push the changes to GitHub.")
+    }
+}
