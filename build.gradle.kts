@@ -26,10 +26,6 @@ kotlin {
                 }
                 sourceMaps = true
             }
-
-            distribution{
-                outputDirectory.file("$buildDir/distributions")
-            }
         }
     }
     sourceSets {
@@ -65,10 +61,15 @@ application {
 }
 
 tasks.register<Delete>("cleanDocs") {
-    // Specify the directory to delete
     delete("docs")
 }
 
+//Find
+// 1. app.bundle.js
+// 2. app.bundle.js.map
+// 3. index.html
+// 4. styles.css
+// Manually put them in docs/ to publish
 tasks.register<Copy>("prepareForGitHubPages") {
     // Ensure the project builds before copying
     dependsOn("jsBrowserProductionWebpack")
@@ -76,8 +77,17 @@ tasks.register<Copy>("prepareForGitHubPages") {
     // Clear old docs directory before copying
     dependsOn("cleanDocs")
 
-    from("build/dist/js/productionExecutable/") // Source folder
-    into("docs/") // Destination folder
+    // Copy HTML and CSS from resources to docs
+    from("src/jsMain/resources") {
+        include("index.html", "styles.css")
+    }
+    into("docs/")
+
+    // Copy JS and map files from the production output to docs
+    from("build/kotlin-webpack/js/productionExecutable") {
+        include("app.bundle.js", "app.bundle.js.map")
+    }
+    into("docs/")
 }
 
 tasks.register("deployToGitHubPages") {

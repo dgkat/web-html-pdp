@@ -60,3 +60,97 @@ button {
 .remove-from-cart:hover {
     background-color: #c82333;
 }
+
+/* Loading button */
+.loading-cart {
+    background-color: #17a2b8; /* Light blue for loading */
+    font-size: 14px; /* Slightly smaller font for loading */
+    padding: 8px 18px; /* Slightly smaller padding */
+    cursor: default; /* Disabled cursor for loading */
+}
+
+/* Container for product details */
+.product-detail-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+}
+
+/* Image container */
+.product-image-container {
+    flex: 1 1 300px; /* Allows image to shrink/grow based on screen size */
+}
+
+/* Product information container */
+.product-info-container {
+    flex: 2 1 400px; /* Allows text to shrink/grow */
+}
+
+/* Image styling */
+.product-image {
+    width: 100%;
+    max-width: 300px;
+    border-radius: 10px;
+}
+
+/* Floating bar */
+.floating-bar {
+    position: fixed;
+    background-color: #ffffff;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    z-index: 1000;
+}
+
+/* Floating bar elements */
+.floating-bar .price {
+    margin-right: 20px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* Button styling */
+.add-to-cart, .remove-from-cart, .loading-cart {
+    font-size: 16px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    color: white;
+    transition: background-color 0.3s ease, font-size 0.3s ease, padding 0.3s ease;
+}
+
+/* Desktop styles */
+@media (min-width: 768px) {
+    /* Product detail layout: side-by-side */
+    .product-detail-container {
+        flex-direction: row;
+    }
+
+    /* Floating bar to the right */
+    .floating-bar {
+        right: 20px;
+        bottom: 20px;
+        width: auto;
+        border-radius: 8px;
+    }
+}
+
+/* Mobile styles */
+@media (max-width: 767px) {
+    /* Product detail layout: stacked */
+    .product-detail-container {
+        flex-direction: column;
+    }
+
+    /* Floating bar at the bottom */
+    .floating-bar {
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        justify-content: space-between;
+    }
+}
