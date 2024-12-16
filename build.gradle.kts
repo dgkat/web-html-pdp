@@ -64,12 +64,26 @@ application {
     mainClass.set("")
 }
 
-/*
-tasks.register() {
-    val jsBrowserDistribution = tasks.named("jsBrowserDistribution")
-    from(jsBrowserDistribution)
-}*/
-/*
-tasks.register("run", org.jetbrains.compose.experimental.dsl.webExtension()) {
-    // Configuration for web browser run
-}*/
+tasks.register<Delete>("cleanDocs") {
+    // Specify the directory to delete
+    delete("docs")
+}
+
+tasks.register<Copy>("prepareForGitHubPages") {
+    // Ensure the project builds before copying
+    dependsOn("jsBrowserProductionWebpack")
+
+    // Clear old docs directory before copying
+    dependsOn("cleanDocs")
+
+    from("build/dist/js/productionExecutable/") // Source folder
+    into("docs/") // Destination folder
+}
+
+tasks.register("deployToGitHubPages") {
+    dependsOn("prepareForGitHubPages")
+
+    doLast {
+        println("Deployment files are ready. Commit and push the changes to GitHub.")
+    }
+}
