@@ -1,6 +1,6 @@
 package productDetailPage.presentation
 
 sealed class ProductDetailPageEvent {
-    data object AddToCart : ProductDetailPageEvent()
-    data object RemoveFromCart : ProductDetailPageEvent()
+    data class AddToCart(val id: String) : ProductDetailPageEvent()
+    data class RemoveFromCart(val id: String) : ProductDetailPageEvent()
 }

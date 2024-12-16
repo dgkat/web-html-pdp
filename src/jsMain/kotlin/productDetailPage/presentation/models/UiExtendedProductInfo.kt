@@ -1,8 +1,7 @@
 package productDetailPage.presentation.models
 
 data class UiExtendedProductInfo(
-    val features: List<UiFeature> ? = null,
-    val isLoading: Boolean = true
+    val features: List<UiFeature>
 )
 
 data class UiFeature(
