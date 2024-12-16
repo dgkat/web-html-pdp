@@ -10,6 +10,16 @@ import productDetailPage.presentation.uiComponents.ProductDetailPage
 
 @Composable
 fun ProductDetailPageScreen(viewModel: ProductDetailPageViewModel = getKoin().get()) {
+    //viewModel: ProductDetailPageViewModel = remember { getKoin().get() }
+    //TODO when viewmodel no longer a singleton
+
+    /*DisposableEffect(Unit) {
+        onDispose {
+            viewModel.onCleared()
+            println("onDispose called")
+        }
+    }*/
+
     val state by viewModel.state.collectAsState()
 
     if (state.isLoading) {
@@ -25,6 +35,6 @@ fun ProductDetailPageScreen(viewModel: ProductDetailPageViewModel = getKoin().ge
     }
 
     state.product?.let {
-        ProductDetailPage(uiProduct = it, isInCart = state.isInCart, onEvent = viewModel::onEvent)
+        ProductDetailPage(uiProduct = it, extendedProductInfo = state.extendedProductInfo, isInCart = state.isInCart, onEvent = viewModel::onEvent)
     }
 }
