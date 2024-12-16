@@ -1,8 +1,10 @@
 plugins {
-    kotlin("multiplatform") version "1.9.22"
+    kotlin("multiplatform") version "2.0.21"
     kotlin("plugin.serialization") version "1.9.22"
     application
-    id("com.google.devtools.ksp") version "1.9.22-1.0.17"
+    id("com.google.devtools.ksp") version "2.0.21-1.0.28"
+    id("org.jetbrains.kotlin.plugin.compose") version "2.0.21"
+    id("org.jetbrains.compose") version "1.7.1"
 }
 
 group = "me.dgkat"
@@ -14,15 +16,6 @@ repositories {
 }
 @OptIn(org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalDistributionDsl::class)
 kotlin {
-    jvm {
-        jvmToolchain(8)
-        withJava()
-        testRuns.named("test") {
-            executionTask.configure {
-                useJUnitPlatform()
-            }
-        }
-    }
     js(IR) {
         binaries.executable()
         browser {
@@ -31,6 +24,7 @@ kotlin {
                 cssSupport{
                     enabled.set(true)
                 }
+                sourceMaps = true
             }
 
             distribution{
@@ -41,9 +35,13 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation("dev.fritz2:core:1.0-RC19.2")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+
+                // Koin for Dependency Injection
+                implementation("io.insert-koin:koin-core:3.5.6")
+
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.1")
             }
         }
         val commonTest by getting {
@@ -51,20 +49,12 @@ kotlin {
                 implementation(kotlin("test"))
             }
         }
-        val jvmMain by getting {
-            dependencies {
-                implementation("io.ktor:ktor-server-netty:2.3.2")
-                implementation("io.ktor:ktor-server-html-builder-jvm:2.3.2")
-                implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.2")
-            }
-        }
-        val jvmTest by getting
         val jsMain by getting {
             dependencies {
-               /* implementation("org.jetbrains.kotlin-wrappers:kotlin-react:18.2.0-pre.346")
-                implementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom:18.2.0-pre.346")
-                implementation("org.jetbrains.kotlin-wrappers:kotlin-emotion:11.9.3-pre.346")*/
-            }
+                implementation("org.jetbrains.compose.web:web-core:1.7.0")
+                implementation("org.jetbrains.compose.runtime:runtime:1.7.0")
+                implementation("com.juul.indexeddb:core:0.9.0")
+                implementation("org.jetbrains.kotlin-wrappers:kotlin-extensions:1.0.1-pre.550")            }
         }
         val jsTest by getting
     }
@@ -74,12 +64,26 @@ application {
     mainClass.set("")
 }
 
-tasks.named<Copy>("jvmProcessResources") {
-    val jsBrowserDistribution = tasks.named("jsBrowserDistribution")
-    from(jsBrowserDistribution)
+tasks.register<Delete>("cleanDocs") {
+    // Specify the directory to delete
+    delete("docs")
 }
 
-tasks.named<JavaExec>("run") {
-    dependsOn(tasks.named<Jar>("jvmJar"))
-    classpath(tasks.named<Jar>("jvmJar"))
+tasks.register<Copy>("prepareForGitHubPages") {
+    // Ensure the project builds before copying
+    dependsOn("jsBrowserProductionWebpack")
+
+    // Clear old docs directory before copying
+    dependsOn("cleanDocs")
+
+    from("build/dist/js/productionExecutable/") // Source folder
+    into("docs/") // Destination folder
+}
+
+tasks.register("deployToGitHubPages") {
+    dependsOn("prepareForGitHubPages")
+
+    doLast {
+        println("Deployment files are ready. Commit and push the changes to GitHub.")
+    }
 }
