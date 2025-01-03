@@ -1,4 +1,4 @@
-plugins {
+/*plugins {
     kotlin("multiplatform") version "2.0.21"
     kotlin("plugin.serialization") version "1.9.22"
     application
@@ -13,8 +13,42 @@ version = "1.0-SNAPSHOT"
 repositories {
     mavenCentral()
     maven("https://maven.pkg.jetbrains.space/public/p/kotlinx-html/maven")
+}*/
+
+plugins {
+    kotlin("multiplatform") version "2.0.21"
+    kotlin("plugin.serialization") version "1.9.22"
+    application
+    id("com.google.devtools.ksp") version "2.0.21-1.0.28"
+    id("org.jetbrains.kotlin.plugin.compose") version "2.0.21"
+    id("org.jetbrains.compose") version "1.7.1"
 }
-@OptIn(org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalDistributionDsl::class)
+
+group = "me.dgkat"
+version = "1.0-SNAPSHOT"
+
+allprojects {
+    repositories {
+        mavenCentral()
+        maven("https://maven.pkg.jetbrains.space/public/p/kotlinx-html/maven")
+    }
+}
+
+kotlin {
+    js(IR) {
+        binaries.executable()
+        browser {
+            commonWebpackConfig {
+                outputFileName = "app.bundle.js" // optional, ensures a single output bundle
+                cssSupport {
+                    enabled.set(true)
+                }
+                sourceMaps = true
+            }
+        }
+    }
+}
+/*@OptIn(org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalDistributionDsl::class)
 kotlin {
     js(IR) {
         binaries.executable()
@@ -54,9 +88,9 @@ kotlin {
         }
         val jsTest by getting
     }
-}
+}*/
 
-application {
+/*application {
     mainClass.set("")
 }
 
@@ -96,4 +130,4 @@ tasks.register("deployToGitHubPages") {
     doLast {
         println("Deployment files are ready. Commit and push the changes to GitHub.")
     }
-}
+}*/
