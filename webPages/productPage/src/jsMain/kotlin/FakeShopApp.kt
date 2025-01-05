@@ -1,31 +1,31 @@
-import org.jetbrains.compose.web.dom.Div
-import org.jetbrains.compose.web.dom.H1
-import org.jetbrains.compose.web.dom.Text
+import commonMain.kotlin.webShared.core.di.appModule
 import org.jetbrains.compose.web.renderComposable
+import org.koin.core.context.GlobalContext.startKoin
+import productDetailPage.di.productDetailPageModule
+import productDetailPage.presentation.ProductDetailPageScreen
 
-/*
 fun main() {
-    */
-/*startKoin {
+startKoin {
         modules(
             listOf(
                 appModule,
                 productDetailPageModule
             )
         )
-    }*//*
+    }
 
     //Sync commit
     try {
         renderComposable(rootElementId = "root") {
             println("testDB 1")
-            //ProductDetailPageScreen()
+            ProductDetailPageScreen()
         }
     }catch (e:Exception){
         println(e)
         throw e
     }
-}*/
+}
+/*
 fun main() {
     renderComposable(rootElementId = "root") {
         Div {
@@ -33,4 +33,4 @@ fun main() {
             Text("This is the product page.")
         }
     }
-}
+}*/
