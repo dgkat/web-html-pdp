@@ -91,3 +91,14 @@ tasks.register<Copy>("copyProductionFiles") {
 tasks.named("jsBrowserProductionWebpack") {
     finalizedBy("copyProductionFiles") // Ensure copying runs after webpack build
 }
+
+tasks.register<Copy>("copyToWebsite") {
+    dependsOn("jsBrowserProductionWebpack")
+    from("$buildDir/kotlin-webpack/js/productionExecutable") {
+        include("product.bundle.js", "product.bundle.js.map")
+    }
+    from("$buildDir/processedResources/js/main") {
+        include("index.html", "styles.css")
+    }
+    into("$rootDir/build/dist/website") // Copy product page here
+}

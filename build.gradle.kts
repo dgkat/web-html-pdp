@@ -131,3 +131,7 @@ tasks.register("deployToGitHubPages") {
         println("Deployment files are ready. Commit and push the changes to GitHub.")
     }
 }*/
+
+tasks.register("buildWebsite") {
+    dependsOn(":webPages:productPage:copyToWebsite", ":webPages:cartPage:copyToWebsite")
+}
