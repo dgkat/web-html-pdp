@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
+
 plugins {
     kotlin("multiplatform") version "2.0.21"
     kotlin("plugin.serialization") version "1.9.22"
@@ -26,6 +28,15 @@ kotlin {
                 }
                 sourceMaps = true
             }
+            runTask {
+                devServerProperty.set(
+                    KotlinWebpackConfig.DevServer(
+                        open = true, // Open browser automatically
+                        static = mutableListOf("$buildDir/dist/js/productionExecutable"),
+                        port = 8080, // Change port for cartPage
+                    )
+                )
+            }
         }
     }
     sourceSets {
@@ -44,9 +55,34 @@ kotlin {
 
 
 application {
-    mainClass.set("jsMain/kotlin/cartPage/presentation/CartPageScreen.kt") // Adjust as necessary
+    mainClass.set("") // Adjust as necessary
 }
 
 tasks.register("runCartPage") {
     dependsOn("jsBrowserDevelopmentRun")
+}
+
+tasks.register<Copy>("copyProductionFiles") {
+    group = "build"
+    description = "Copies production build files to a single directory for serving."
+
+    val customOutputDir = layout.buildDirectory.dir("dist/js/customExecutable")
+
+    from(layout.buildDirectory.dir("kotlin-webpack/js/productionExecutable")) {
+        include("cart.bundle.js", "cart.bundle.js.map")
+    }
+
+    from(layout.buildDirectory.dir("processedResources/js/main")) {
+        include("index.html", "styles.css")
+    }
+
+    into(customOutputDir)
+
+    doLast {
+        println("✅ Production files copied to ${customOutputDir.get().asFile.absolutePath}")
+    }
+}
+
+tasks.named("jsBrowserProductionWebpack") {
+    finalizedBy("copyProductionFiles") // Ensure copying runs after webpack build
 }
