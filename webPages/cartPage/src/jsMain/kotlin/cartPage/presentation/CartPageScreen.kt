@@ -31,7 +31,7 @@ fun main() {
         Div {
             H1 { Text("Cart App") }
             when (route) {
-                "/cart" -> CartPage()
+                "/cart/", "/cart" -> CartPage()
                 "/cart/payment" -> PaymentPage()
                 "/cart/shipping-info" -> ShippingInfoPage()
                 else -> NotFoundPage()

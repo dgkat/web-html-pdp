@@ -1,6 +1,8 @@
 package productDetailPage.presentation.uiComponents
 
 import androidx.compose.runtime.Composable
+import kotlinx.browser.window
+import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*
 import productDetailPage.presentation.IsInCartEnum
 import productDetailPage.presentation.ProductDetailPageEvent
@@ -46,6 +48,8 @@ fun ProductDetailPage(
             onEvent = onEvent
         )
     }
+    Br()
+    ARefToCartButton()
 }
 
 @Composable
@@ -79,5 +83,58 @@ fun AddToCartButton(
                 IsInCartEnum.LOADING -> "Loading"
             }
         )
+    }
+}
+
+@Composable
+fun GoToCartButton(){
+
+    Button(attrs = {
+        style {
+            padding(10.px)
+            fontSize(18.px)
+            margin(10.px)
+            cursor("pointer")
+            backgroundColor(Color.blue)
+            color(Color.white)
+            borderRadius(5.px)
+            border(0.px)
+        }
+        onClick {
+            val productId = 123
+            val testParam = "hello"  // Optional parameter
+
+            // Build URL with parameters
+            val url = "http://localhost:8080/cart?productId=$productId&testParam=$testParam"
+
+            // Navigate to cart page
+            window.location.href = url
+        }
+    }) {
+        Text("Go to Cart")
+    }
+}
+
+@Composable
+fun ARefToCartButton(){
+    val productId = 222
+    val testParam = "hello"  // Optional parameter
+
+    // Build URL with parameters
+    val url = "http://localhost:8080/cart?productId=$productId&testParam=$testParam"
+    A(href = url, attrs = {
+        style {
+            padding(10.px)
+            fontSize(18.px)
+            margin(10.px)
+            cursor("pointer")
+            backgroundColor(Color.blue)
+            color(Color.white)
+            borderRadius(5.px)
+            border(0.px)
+            textDecoration("none") // Make the link look like a button
+        }
+    }) {
+        Text("Go to Cart")
     }
 }

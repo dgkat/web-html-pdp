@@ -131,7 +131,10 @@ tasks.register("deployToGitHubPages") {
         println("Deployment files are ready. Commit and push the changes to GitHub.")
     }
 }*/
-
+// ---- How to Run ----
+// 1. Run buildWebsite (optional : Clean before)
+// 2. cd to generated file eg C:\Users\...\web-html-pdp\build\dist\website
+// 3. npx http-server -p 8080
 tasks.register("buildWebsite") {
     dependsOn(":webPages:productPage:copyToWebsite", ":webPages:cartPage:copyToWebsite")
 }
