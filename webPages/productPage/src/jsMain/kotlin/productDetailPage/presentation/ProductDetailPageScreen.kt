@@ -19,6 +19,19 @@ fun ProductDetailPageScreen(viewModel: ProductDetailPageViewModel = getKoin().ge
             println("onDispose called")
         }
     }*/
+    //Navigation
+    /*val context = LocalContext.current // Needed for some navigation methods
+
+    // Collect navigation event
+    val navigationEvent = remember { viewModel.navigationEvent }
+    LaunchedEffect(Unit) {
+        navigationEvent.collect { url ->
+            // Perform navigation when event is emitted
+            window.location.href = url
+        }
+    }*/
+
+    //On click call viewModel.fetchProductAndNavigate() to trigger navigation
 
     val state by viewModel.state.collectAsState()
 

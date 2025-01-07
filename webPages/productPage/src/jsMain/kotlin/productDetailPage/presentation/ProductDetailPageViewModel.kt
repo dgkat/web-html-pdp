@@ -101,4 +101,25 @@ class ProductDetailPageViewModel(
             is ProductDetailPageEvent.RemoveFromCart -> removeProductFromCart()
         }
     }
+
+    // One-time navigation event
+    /*private val _navigationEvent = MutableSharedFlow<String>() // URL as a string
+    val navigationEvent = _navigationEvent.asSharedFlow()
+
+    fun fetchProductAndNavigate() {
+        viewModelScope.launch {
+            try {
+                val product = getProductUseCase.execute() // Simulating remote call
+
+                // Assume product.id is what we need
+                val productId = product.id
+
+                // Emit navigation event
+                _navigationEvent.emit("http://localhost:8080/cart?productId=$productId")
+            } catch (e: Exception) {
+                // Handle error (log or show message)
+            }
+        }
+    }*/
+
 }
