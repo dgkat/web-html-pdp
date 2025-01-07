@@ -8,6 +8,10 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/webPages" />
+            <option value="$PROJECT_DIR$/webPages/cartPage" />
+            <option value="$PROJECT_DIR$/webPages/productPage" />
+            <option value="$PROJECT_DIR$/webShared" />
           </set>
         </option>
       </GradleProjectSettings>
